@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Signal with Car</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- ....................................css..................................................... -->
+    <style>
+        body {
+    background-color: #cce7ff;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+   
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.traffic-signal {
+    width: 100px;
+    background-color: #333;
+    padding: 20px;
+    border-radius: 20px;
+    margin-top: 20px;
+    position: relative;
+}
+
+.light {
+    width: 60px;
+    height: 60px;
+    background-color: grey;
+    margin: 15px auto;
+    border-radius: 50%;
+}
+
+.timer {
+    color: white;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 24px;
+}
+
+.road {
+    margin-top: 50px;
+    width: 100%;
+    height: 100px;
+    background-color: #555;
+    position: relative;
+    overflow: hidden;
+}
+
+.car {
+    width: 50px;
+    height: 30px;
+    background-color: red;
+    border-radius: 5px;
+    position: absolute;
+    top: 35px;
+    left: 0;
+}
+
+    </style>
+</head>
+<!-- .........................html...................................... -->
+<body>
+
+    <div class="container">
+        <div class="traffic-signal">
+            <div class="light red"></div>
+            <div class="light yellow"></div>
+            <div class="light green"></div>
+            <div class="timer" id="timer">10</div>
+        </div>
+
+        <div class="road">
+            <div class="car" id="car"></div>
+        </div>
+    </div>
+<!-- .........................................js.................................................... -->
+    <script src="script.js"></script>
+    <script>
+        let redLight = document.querySelector('.red');
+let yellowLight = document.querySelector('.yellow');
+let greenLight = document.querySelector('.green');
+let timerDisplay = document.getElementById('timer');
+let car = document.getElementById('car');
+
+let time = 10;
+let currentLight = 'red';
+let carPosition = 0;
+let moveCar = false;
+
+function updateLights() {
+    redLight.style.backgroundColor = 'grey';
+    yellowLight.style.backgroundColor = 'grey';
+    greenLight.style.backgroundColor = 'grey';
+
+    if (currentLight === 'red') {
+        redLight.style.backgroundColor = 'red';
+        moveCar = false;
+        time = 10;
+    } else if (currentLight === 'green') {
+        greenLight.style.backgroundColor = 'green';
+        moveCar = true;
+        time = 10;
+    } else if (currentLight === 'yellow') {
+        yellowLight.style.backgroundColor = 'yellow';
+        moveCar = false;
+        time = 5;
+    }
+}
+
+function changeLight() {
+    if (currentLight === 'red') {
+        currentLight = 'green';
+    } else if (currentLight === 'green') {
+        currentLight = 'yellow';
+    } else {
+        currentLight = 'red';
+    }
+    updateLights();
+}
+
+function updateTimer() {
+    timerDisplay.textContent = time;
+    time--;
+    if (time < 0) {
+        changeLight();
+    }
+}
+
+function moveCarForward() {
+    if (moveCar) {
+        carPosition += 2;
+        if (carPosition > window.innerWidth) {
+            carPosition = -50; // Reset car back to start
+        }
+    }
+    car.style.left = carPosition + 'px';
+}
+
+// Start everything
+updateLights();
+setInterval(updateTimer, 1000);
+setInterval(moveCarForward, 20);
+
+    </script>
+</body>
+</html>
